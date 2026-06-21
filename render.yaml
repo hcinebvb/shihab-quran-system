@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: shihab-quran-app
+    env: node
+    rootDir: backend
+    plan: free
+    autoDeploy: true
+    buildCommand: npm install
+    startCommand: npm run db:init && npm run db:seed && npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: DB_PATH
+        value: /opt/render/project/src/backend/data/shihab.sqlite
+    disk:
+      name: shihab-data
+      mountPath: /opt/render/project/src/backend/data
+      sizeGB: 1
