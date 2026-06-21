@@ -1,140 +1,81 @@
-# نظام إدارة مدرسة شهاب للقرآن الكريم
+# Backend — مدرسة الشهاب
 
-نظام ويب متكامل لإدارة مدرسة قرآنية — واجهة عربية RTL، تخزين محلي، وجاهز للربط بـ Backend.
+Backend جاهز للإنتاج المبدئي باستخدام:
 
-## المتطلبات
+- Node.js + Express
+- SQLite
+- JWT Authentication
+- RBAC (admin/supervisor/teacher)
+- نظام دفعات ثلاثي: `t1`, `t2`, `t3`, `summer`
+- يخدم الواجهة الأمامية من نفس الرابط (Single Service)
 
-- متصفح حديث (Chrome, Firefox, Edge)
-- لا حاجة لخادم — يعمل مباشرة من الملفات
-- (اختياري) Live Server أو أي خادم محلي للتطوير
-
-## طريقة التشغيل
-
-### 1. فتح مباشر
-افتح الملف `login.html` في المتصفح.
-
-### 2. عبر خادم محلي (موصى به)
-```bash
-cd shihab-quran-system
-npx serve .
-# أو
-python -m http.server 8080
-```
-ثم افتح: `http://localhost:8080/login.html`
-
-## حسابات تجريبية
-
-| الدور | المستخدم | كلمة المرور |
-|-------|----------|-------------|
-| مدير النظام | admin | admin123 |
-| مشرف | supervisor | sup123 |
-| أستاذ | aziz | teacher123 |
-
-## الصلاحيات
-
-- **مدير النظام**: جميع الصلاحيات + الإعدادات
-- **مشرف**: التلاميذ، الحضور، الأفواج، المالية، التقارير، الاستيراد
-- **أستاذ**: تلاميذه، الحفظ، الحضور
-
-## هيكلة المشروع
-
-```
-shihab-quran-system/
-├── index.html              → تحويل تلقائي لصفحة الدخول
-├── login.html              → تسجيل الدخول
-├── dashboard.html          → لوحة التحكم
-├── students.html           → إدارة التلاميذ
-├── teachers.html           → إدارة الأساتذة
-├── groups.html             → إدارة الأفواج
-├── attendance.html         → الحضور والغياب
-├── memorization.html       → إدارة الحفظ
-├── finance.html            → الإدارة المالية
-├── reports.html            → التقارير والتصدير
-├── import.html             → الاستيراد الذكي
-├── settings.html           → الإعدادات
-├── assets/
-│   ├── css/                → variables.css, main.css
-│   └── js/
-│       ├── db.js           → طبقة البيانات (LocalStorage)
-│       ├── ui.js           → أدوات الواجهة
-│       ├── app.js          → Sidebar, Navbar, Auth
-│       ├── icons.js        → أيقونات SVG
-│       ├── surahs.js       → قائمة السور
-│       └── pages/          → منطق كل صفحة
-├── components/             → قوالب HTML مرجعية
-└── database/
-    └── schema.sql          → هيكل SQLite جاهز للربط
-```
-
-## الميزات
-
-- واجهة عربية RTL احترافية
-- الوضع الليلي / النهاري
-- Responsive — يعمل على الجوال
-- LocalStorage للتخزين الفوري
-- تصدير CSV / JSON
-- طباعة التقارير ووصول الدفع
-- استيراد CSV للتلاميذ، وJSON/CSV للحضور والغياب
-- بحث متقدم عن التلاميذ بالاسم، الهاتف، الفوج، الأستاذ أو الحالة
-- بيانات تجريبية جاهزة (10 تلاميذ، 5 أساتذة، 4 أفواج)
-
-## الربط بـ Backend مستقبلاً
-
-1. استخدم `database/schema.sql` لإنشاء قاعدة SQLite/MySQL
-2. استبدل دوال `store.get/set` في `db.js` بـ `fetch()` إلى API
-3. دوال `exportAll()` و `importAll()` جاهزة للمزامنة
-
-### مثال API (Node.js / PHP / Django)
-```
-GET  /api/students
-POST /api/students
-PUT  /api/students/:id
-DELETE /api/students/:id
-```
-
-## استيراد CSV
-
-استخدم ملف `database/sample_students.csv` كنموذج:
-
-```csv
-الاسم,اللقب,الجنس,هاتف الولي
-أحمد,بن محمد,ذكر,0550123456
-```
-
-لاستيراد الغيابات استخدم ملف `database/sample_attendance.html` كنسخة HTML، أو `database/sample_attendance.csv` كنسخة CSV:
-
-```csv
-اسم التلميذ,التاريخ,الحالة,ملاحظات
-محمد بن علي,2026-06-02,غائب,
-```
-
-## النسخ الاحتياطي
-
-من صفحة **الإعدادات** → تصدير نسخة احتياطية (JSON)
-
-## الترخيص
-
-مشروع مفتوح للاستخدام والتطوير — مدرسة شهاب للقرآن الكريم
-
----
-
-## Backend جاهز
-
-تمت إضافة مشروع Backend كامل داخل:
-
-`backend/`
-
-وللنشر العام على الإنترنت (Render) يوجد ملف:
-
-`render.yaml`
-
-لتشغيله:
+## 1) التثبيت
 
 ```bash
 cd backend
 npm install
 copy .env.example .env
+```
+
+## 2) تهيئة قاعدة البيانات
+
+```bash
 npm run db:init
 npm run db:seed
+```
+
+## 3) التشغيل
+
+```bash
 npm run dev
 ```
+
+السيرفر:
+
+`http://localhost:4000`
+
+فحص الصحة:
+
+`GET /api/health`
+
+## حسابات افتراضية
+
+- `admin` / `admin123`
+- `supervisor` / `sup123`
+
+## أهم الـ Endpoints
+
+- `POST /api/auth/login`
+- `GET /api/auth/me`
+- `GET/POST/PUT/DELETE /api/students`
+- `GET/POST/PUT/DELETE /api/teachers`
+- `GET/POST/PUT/DELETE /api/groups`
+- `GET /api/attendance?date=YYYY-MM-DD&groupId=...`
+- `POST /api/attendance/bulk`
+- `GET /api/payments/matrix/:groupId?academicYear=2025-2026`
+- `POST /api/payments/matrix/:groupId`
+- `GET /api/dashboard/kpis`
+
+## ملاحظة الترحيل
+
+`npm run db:seed` يستورد تلقائيًا البيانات من:
+
+`../database/school_data.json`
+
+ويحوّل الدفعات الشهرية القديمة إلى نظام الثلاثيات + الصيفية.
+
+> ملاحظة: السكربت لن يعيد التهيئة إذا كانت القاعدة تحتوي مستخدمين. لإعادة التهيئة القسرية:
+>
+> `FORCE_SEED=true npm run db:seed`
+
+## نشر مباشر على Render
+
+- ملف النشر موجود في جذر المشروع: `render.yaml`
+- عند أول Deploy سيتم:
+  - مزامنة الواجهة تلقائيًا إلى `backend/public`
+  - إنشاء القاعدة
+  - استيراد البيانات الأولية
+  - تشغيل API والواجهة معًا على نفس الرابط
+- بعد النشر استخدم:
+  - `https://YOUR-APP.onrender.com/login.html`
+  - الحساب: `admin` / `admin123`
